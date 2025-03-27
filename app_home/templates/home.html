@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block links %}{% endblock %}
+
+{% block body %}
+    <div class="container text-center" style="margin-top: 10px;"></div>
+    <div class="container text-center" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Text Processing</h5>
+                        <p class="card-text">Go to text processing exercise.</p>
+                        <a href="/text/textprocessing" class="btn btn-secondary">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Pesel Verification</h5>
+                        <p class="card-text">Go to PESEL Verification</p>
+                        <a href="#" class="btn btn-secondary">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Recursion</h5>
+                        <p class="card-text">Go to recursion example</p>
+                        <a href="/home" class="btn btn-secondary">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}{% endblock %}

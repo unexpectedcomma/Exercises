@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Text Processing{% endblock %}
+
+{% block links %}{% endblock %}
+
+{% block body %}
+    <div class="card card-default shadow rounded border w-50 mx-auto text-center">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-text">
+                    <p></p>
+                    {% for field in form %}
+                        <div class="fieldWrapper">
+                            <div class="form-group">
+                                {{ field.label_tag }}
+                                <input type="{{ field.field.widget.input_type }}"
+                                    name="{{ field.name }}"
+                                    class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                    value="{{ field.value|default:'' }}" />
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <p></p>
+                </div>
+                <button type="submit" class="btn btn-secondary">Upload</button>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}{% endblock %}
