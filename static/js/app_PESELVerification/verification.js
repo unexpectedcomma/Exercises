@@ -3,19 +3,23 @@ window.onload = function() {
     console.log("Page (including images & styles) is fully loaded!");
     var peselField = document.getElementById("peselField");
     var sexField = document.getElementById("sexField");
+    var dateOfBirth = document.getElementById("dateOfBirth")
 
     peselField.addEventListener('input', function() {
         console.log('validating')
-        validate(peselField, sexField);
+        validate(peselField, sexField, dateOfBirth);
     });
 
 
 };
 
-function validate(peselField, sexField){
+function validate(peselField, sexField, dateOfBirthField){
     let validation = checkPesel(peselField.value)
     if (validation.value) {
+
         setSex(validation.sex, sexField);
+        setDateOfBrith(peselField.value, dateOfBirthField)
+
         peselField.classList.remove("is-invalid");
         peselField.classList.add("is-valid");
     } else {
@@ -100,4 +104,41 @@ function addNewError(message, inputField){
     newDiv.classList.add('invalid-feedback');
     newDiv.textContent = message;
     inputField.insertAdjacentElement('afterend', newDiv);
+}
+
+function setDateOfBrith(pesel, inputField){
+    let year = Number(pesel.slice(0, 2));
+    let month = Number(pesel.slice(2, 4));
+    let day = Number(pesel.slice(4, 6));
+
+    if (month >= 1 && month <= 12) {
+        year += 1900;
+    } else if (month >= 13 && month <= 32) {
+        year += 2000;
+        month -= 20;
+    } else if (month >= 40 && month <= 42) {
+        year += 2100;
+        month -= 40;
+    } else if (month >= 60 && month <= 72) {
+        year += 2200;
+        month -= 60;
+    } else if (month >= 80 && month <= 92) {
+        year += 1800;
+        month -= 80;
+    }
+    let formattedMonth = "";
+    let formattedDay = "";
+    if (month<=9){
+       formattedMonth = month.toString().padStart(2, "0");
+    } else {
+        formattedMonth = month.toString();
+    }
+    if (day<=9){
+       formattedDay = day.toString().padStart(2, "0");
+    } else {
+        formattedDay = day.toString();
+    }
+
+    inputField.value = `${year}-${formattedMonth}-${formattedDay}`;
+
 }

@@ -1,4 +1,5 @@
 from django import forms
+from datetime import datetime
 
 
 class PeselForm(forms.Form):
@@ -6,7 +7,8 @@ class PeselForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Please input your PESEL'}),
         label='PESEL'
     )
-    sexField = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')], label='Sex')
+    sexField = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female')], label='Sex', required=False)
+    dateOfBirth = forms.DateField(required=False)
 
     def clean_peselField(self):
         pesel = self.cleaned_data.get('peselField')
@@ -35,6 +37,7 @@ class PeselForm(forms.Form):
         if not self.errors and pesel:
             sex = self.get_sex_from_pesel(pesel)
             cleaned_data['sexField'] = sex
+            cleaned_data['dateOfBirth'] = self.get_bday_from_pesel(pesel)
 
         return cleaned_data
 
@@ -43,3 +46,24 @@ class PeselForm(forms.Form):
             return 'F'
         else:
             return 'M'
+    def get_bday_from_pesel(self, pesel):
+        day = int(pesel[4:6])
+        month = int(pesel[2:4])
+        year = int(pesel[0:2])
+
+        if 1 <= month <= 12:
+            year += 1900
+        elif 13 <= month <= 32:
+            year += 2000
+            month -= 20
+        elif 40 <= month <= 42:
+            year += 2100
+            month -= 40
+        elif 60 <= month <= 72:
+            year += 2200
+            month -= 60
+        elif 80 <= month <= 92:
+            year += 1800
+            month -= 80
+
+        return datetime(year, month, day).date()

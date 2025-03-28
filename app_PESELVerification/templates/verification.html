@@ -11,7 +11,7 @@
             <form class="form-inline" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="input-group mb-2 mr-sm-2">
-                    <input name="{{ form.peselField.name }}" type="text" class="form-control {{ form.peselField.class }} {{ validity }}" id="peselField" placeholder="PESEL" value={{ pesel }}>
+                    <input name="{{ form.peselField.name }}" type="text" class="form-control {{ form.peselField.class }} {{ validity }}" id="peselField" placeholder="PESEL" value="{{ pesel }}"  autocomplete="off">
                     {% for error in form.peselField.errors %}
                         <div class="invalid-feedback">{{ error }}</div>
                     {% endfor %}
@@ -27,6 +27,12 @@
                         {% endfor %}
                     </select>
                     {% for error in form.sexField.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="input-group mb-2 mr-sm-2">
+                    <input name="{{ form.dateOfBirth.name }}" type="date" class="form-control {{ form.dateOfBirth.class }} {{ validity }}" id="dateOfBirth" value='{{ dateOfBirth }}'>
+                    {% for error in form.dateOfBirth.errors %}
                         <div class="invalid-feedback">{{ error }}</div>
                     {% endfor %}
                 </div>
