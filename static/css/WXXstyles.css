@@ -1,0 +1,34 @@
+.verification-card {
+    max-width: 500px;
+    min-width: 200px
+}
+.wxx-margin {
+    margin-top: 10px;
+}
+.wxx-card {
+    width: 18rem;
+}
+.wxx-navbar {
+    background-color: gray;
+    color: white;
+    display: flex;
+    vertical-align: middle;
+
+}
+.wxx-navbarlink {
+    color: white;
+    text-decoration: none;
+}
+.wxx-paragraph {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    background-color: #eee;
+    max-height: 50vh;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+#dropZone.dragover {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);  /* Light blue background */
+}

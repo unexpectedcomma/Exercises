@@ -1,20 +1,21 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}PESEL Verification{% endblock %}
 
 {% block links %}{% endblock %}
 
 {% block body %}
-    <div class="card card-default shadow rounded border w-50 mx-auto text-center" style="max-width: 500px; min-width: 200px">
+    <div class="card card-default shadow rounded border w-50 mx-auto text-center verification-card">
         <div class="card-body">
             <form class="form-inline" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="input-group mb-2 mr-sm-2">
-                    <input name="{{ form.peselField.name }}" type="text" class="form-control {{ form.peselField.class }} {% if form.peselField.errors %}is-invalid{% endif %}" id="peselField" placeholder="PESEL">
+                    <input name="{{ form.peselField.name }}" type="text" class="form-control {{ form.peselField.class }} {{ validity }}" id="peselField" placeholder="PESEL" value={{ pesel }}>
+                    {% for error in form.peselField.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
                 </div>
-                {% for error in form.peselField.errors %}
-                    <div class="invalid-feedback">{{ error }}</div>
-                {% endfor %}
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="sexField">{{ form.sexField.label }}</label>
@@ -22,7 +23,7 @@
                     <select name="{{ form.sexField.name }}" id="sexField" class=" form-select {{ form.sexField.class }} {% if form.sexField.errors %}is-invalid{% endif %}">
                         <option value=""></option>
                         {% for value, label in form.sexField.field.choices %}
-                            <option value="{{ value }}">{{ label }}</option>
+                            <option value="{{ value }}" {% if value == sex %}selected{% endif %}>{{ label }}</option>
                         {% endfor %}
                     </select>
                     {% for error in form.sexField.errors %}
@@ -38,113 +39,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script>
-    window.onload = function() {
-        console.log("Page (including images & styles) is fully loaded!");
-        var peselField = document.getElementById("peselField");
-        var sexField = document.getElementById("sexField");
-
-        peselField.addEventListener('input', function() {
-            validate(peselField, sexField);
-        });
-
-
-    };
-
-    function validate(peselField, sexField){
-        let validation = checkPesel(peselField.value)
-        if (validation.value) {
-            setSex(validation.sex, sexField);
-            peselField.classList.remove("is-invalid");
-            peselField.classList.add("is-valid");
-        } else {
-            removeOldErrors(peselField);
-            setSex("", sexField);
-            validation.error.forEach(function(error) {
-                addNewError(error, peselField);
-                peselField.classList.remove("is-valid");
-                peselField.classList.add("is-invalid");
-
-            });
-        }
-    }
-
-    function checkPesel(pesel) {
-
-        let result = {
-            value: true,
-            error: [],
-            sex: "x"
-
-        }
-        if (typeof pesel !== "string" || pesel.length !== 11) {
-            result.error.push("PESEL must be 11 digits long");
-            result.value = false;
-        }
-
-        let Nan = false;
-        for (let i = 0; i < pesel.length; i++) {
-            if (isNaN(Number(pesel[i]))) {
-                Nan = true;
-            }
-        }
-        if (NaN){
-            result.error.push("PESEL must only consist of digits");
-            result.value = false;
-        }
-
-
-        let weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
-        let digits = pesel.split("").map(Number);
-
-        // Calculate checksum
-        let sum = 0;
-        for (let i = 0; i < weights.length; i++) {
-            sum += weights[i] * digits[i];
-        }
-
-        // Compute control digit
-        let controlDigit = (10 - (sum % 10)) % 10;
-
-        // Compare calculated control digit with the last PESEL digit
-        if (controlDigit !== digits[10]) {
-            result.error.push("PESEL is incorrect");
-            result.value = false;
-        }
-        result.sex = checkSex(digits[9]);
-        return result;
-    }
-
-    function checkSex(digit) {
-        return digit % 2 === 0 ? 'F' : 'M';
-    }
-
-    function setSex(sex, sexField) {
-        sexField.value = sex;
-    }
-
-    function removeOldErrors(inputField) {
-    let sibling = inputField.nextElementSibling;
-
-    // Loop through all the following siblings
-    while (sibling) {
-        let nextSibling = sibling.nextElementSibling;
-
-        // Check if the sibling is a <div>
-        if (sibling.tagName.toLowerCase() === 'div') {
-            sibling.remove(); // Remove the div
-        }
-
-        // Move to the next sibling (stored in nextSibling to prevent skipping)
-        sibling = nextSibling;
-    }
-}
-    function addNewError(message, inputField){
-        let newDiv = document.createElement('div');
-        newDiv.classList.add('invalid-feedback');
-        newDiv.textContent = message;
-        inputField.insertAdjacentElement('afterend', newDiv);
-    }
-    </script>
+    <script src="{% static 'js/app_PeselVerification/verification.js' %}"></script>
 {% endblock %}
 

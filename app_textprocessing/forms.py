@@ -7,4 +7,4 @@ def validate_txt_file(value):
 
 
 class DocumentForm(forms.Form):
-    docfile = forms.FileField(label='Select a file', validators=[validate_txt_file])
+    docfile = forms.FileField(label='Select a file or drag and drop', validators=[validate_txt_file])

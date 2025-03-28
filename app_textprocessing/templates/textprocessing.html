@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Text Processing{% endblock %}
 
 {% block links %}{% endblock %}
 
 {% block body %}
-    <div class="card card-default shadow rounded border w-50 mx-auto text-center">
+    <div class="card card-default shadow rounded border w-50 mx-auto text-center" id="dropZone">
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="card-text">
+                <div class="card-text" >
                     <p></p>
                     {% for field in form %}
                         <div class="fieldWrapper">
@@ -18,7 +19,8 @@
                                 <input type="{{ field.field.widget.input_type }}"
                                     name="{{ field.name }}"
                                     class="form-control {% if field.errors %}is-invalid{% endif %}"
-                                    value="{{ field.value|default:'' }}" />
+                                    value="{{ field.value|default:'' }}"
+                                    id ="fileInput" />
                                 {% for error in field.errors %}
                                     <div class="invalid-feedback">{{ error }}</div>
                                 {% endfor %}
@@ -35,4 +37,6 @@
 
 {% endblock %}
 
-{% block scripts %}{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/app_textprocessing/drag-and-drop.js' %}"></script>
+{% endblock %}

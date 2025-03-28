@@ -30,12 +30,12 @@ def scramble(content):
         if not len(word) <= 3:
             first, middle, last = word[0], list(word[1:-1]), word[-1]
             random.shuffle(middle)
-            scrambled_word = first + "".join(middle) + last  # Reconstruct word
+            scrambled_word = first + "".join(middle) + last
         else:
-            scrambled_word = word  # Keep short words unchanged
+            scrambled_word = word
 
-        scrambled_words.append(scrambled_word)  # Store the modified word
+        scrambled_words.append(scrambled_word)
 
-    return " ".join(scrambled_words)  # Reconstruct sentence
+    return " ".join(scrambled_words)
 
 
