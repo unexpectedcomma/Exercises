@@ -1,3 +1,8 @@
 from django.shortcuts import render
+from .forms import PeselForm
 
-# Create your views here.
+def verify_pesel_view(request):
+    context = {
+        "form": PeselForm()
+    }
+    return render(request, "verification.html", context)
